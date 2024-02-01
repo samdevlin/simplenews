@@ -4,15 +4,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var indexRouter = require('./app/routes/index');
+var usersRouter = require('./app/routes/users');
 var { Liquid } = require('liquidjs');
 var app = express();
 
 // view engine setup
 var engine = new Liquid();
 app.engine('liquid', engine.express());
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'app/views'));
 app.set('view engine', 'liquid');
 
 app.use(logger('dev'));

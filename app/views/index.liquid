@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title>Simple News.</title>
+    </head>
+    <h1>Simple News.</h1>
+    <body>
+        {% if data %}
+            <ul>
+                {% for article in data %}
+                    <li><a href="{{ article.url }}">{{ article.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            Could not load the news, sorry!
+        {% endif %}
+    </body>
+</html>
