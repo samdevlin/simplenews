@@ -1,7 +1,7 @@
 const { parseStringPromise } = require('xml2js');
-const sitemapUrl = "https://www.dailyrecord.co.uk/map_news.xml";
+const sitemapUrl = "https://www.footballscotland.co.uk/map_news.xml";
 
-const SOURCE = 'DAILY_RECORD'
+const SOURCE = 'FOOTBALL_SCOTLAND'
 
 module.exports = {
     getNews
