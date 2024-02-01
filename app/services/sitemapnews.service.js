@@ -1,14 +1,11 @@
 const { parseStringPromise } = require('xml2js');
-const sitemapUrl = "https://www.footballscotland.co.uk/map_news.xml";
-
-const SOURCE = 'FOOTBALL_SCOTLAND'
 
 module.exports = {
     getNews
 }
 
-// TODO: sources that use google news site map can be treated the same when I add TS to the project.
-async function getNews() {
+// A generic function to process google sitemaps
+async function getNews(sourceName, sitemapUrl) {
     // get sitemap & parse to JSON
     const response = await fetch(sitemapUrl);
     const body = await response.text();
@@ -16,16 +13,24 @@ async function getNews() {
 
     // reduce to only the data we're actually interested in
     return json.urlset.url.reduce((out, newsObj) => {
+        // Try to use keywords field to filter. If not present, use title.
         const innerData =  newsObj['news:news'][0];
-        const keywords = innerData['news:keywords'][0].toUpperCase();
-        if(keywords.includes('CELTIC')){
+        let filterField = innerData['news:keywords'];
+        if(filterField){
+            filterField = filterField[0].toUpperCase();
+        }
+        else{
+            filterField = innerData['news:title'][0].toUpperCase();
+        }
+
+        if(filterField.includes('CELTIC')){
             let news = {}
             news.title = innerData['news:title'][0];
             news.url = newsObj['loc'][0];
             news.publicationDate = innerData['news:publication_date'][0];
-            news.lastModified = newsObj['lastmod'][0]
-            news.keywords = keywords;
-            news.source = SOURCE;
+            news.lastModified = newsObj['lastmod'] ? newsObj['lastmod'][0] : "";
+            news.keywords = filterField;
+            news.source = sourceName;
 
             out.push(news);
         }
